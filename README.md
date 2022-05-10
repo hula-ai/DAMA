@@ -8,7 +8,7 @@ This is a PyTorch/GPU implementation of the paper [Student Collaboration Improve
 
 * This repo is based on PyTorch=1.10.1 and timm=0.5.4
 
-Below is the fine-tune result of DAMA compared to other state-of-the-art methods pretrained on brain cells dataset and ImageNet-1k. Please see the paper for detailed results.
+Below is the fine-tune result of DAMA compared to other state-of-the-art methods pretrained on **brain cells dataset** and **ImageNet-1k**. Please see the paper for detailed results.
 
 ### Brain Cell datasets
 Manually collected set *Aug-30k* and noisy set *Real-30k*
