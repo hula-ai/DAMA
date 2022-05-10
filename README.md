@@ -26,7 +26,7 @@ Manually collected set *Aug-30k* and noisy set *Real-30k*
 <tr>
 <td align="left">Rand. init</td>
 <td align="center">300</td>
-<td colspan="2">74</td>
+<td colspan="2" align="center">74</td>
 </tr>
 <tr>
 <td align="left">Moco-v3</td>
