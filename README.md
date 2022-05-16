@@ -1,10 +1,19 @@
 ## DAMA - Student Collaboration Improves Self-Supervised Learning: Dual-Loss Adaptive Masked Autoencoder for Brain Cell Image Analysis
 
-This is a PyTorch/GPU implementation of the paper [Student Collaboration Improves Self-Supervised Learning: Dual-Loss Adaptive Masked Autoencoder for Brain Cell Image Analysis](https://arxiv.org/abs/2205.05194):
+This is a PyTorch/GPU implementation of the paper [Student Collaboration Improves Self-Supervised Learning: Dual-Loss Adaptive Masked Autoencoder for Brain Cell Image Analysis](https://arxiv.org/abs/2205.05194)
 
 <p align="center">
   <img src="https://github.com/hula-ai/DAMA/blob/main/imgs/ECCV-pipeline.png" width="720">
 </p>
+
+```
+@article{ly2022student,
+  title={Student Collaboration Improves Self-Supervised Learning: Dual-Loss Adaptive Masked Autoencoder for Brain Cell Image Analysis},
+  author={Ly, Son T and Lin, Bai and Vo, Hung Q and Maric, Dragan and Roysam, Badri and Nguyen, Hien V},
+  journal={arXiv preprint arXiv:2205.05194},
+  year={2022}
+}
+```
 
 * This repo is based on PyTorch=1.10.1 and timm=0.5.4
 
