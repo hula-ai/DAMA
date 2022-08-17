@@ -11,13 +11,14 @@ class DAMA(nn.Module):
     Build a Masked Autoencoder ViTs backbone with mutual Information approach
     """
 
-    def __init__(self, base_encoder, loss_beta=2, last_k_blocks=6, loss_alpha=1, norm_pix_loss=False):
+    def __init__(self, base_encoder, loss_beta=2, last_k_blocks=6, loss_alpha=1, norm_pix_loss=False, in_chans=7):
         super(DAMA, self).__init__()
 
         self.loss_beta = loss_beta
         self.last_k_blocks = last_k_blocks
         self.loss_alpha = loss_alpha
         self.norm_pix_loss = norm_pix_loss
+        self.in_chans = in_chans
 
         # build encoders
         self.base_encoder = base_encoder()
@@ -55,9 +56,9 @@ class DAMA(nn.Module):
         assert imgs.shape[2] == imgs.shape[3] and imgs.shape[2] % p == 0
 
         h = w = imgs.shape[2] // p
-        x = imgs.reshape(shape=(imgs.shape[0], 3, h, p, w, p))
+        x = imgs.reshape(shape=(imgs.shape[0], self.in_chans, h, p, w, p))
         x = torch.einsum('nchpwq->nhwpqc', x)
-        x = x.reshape(shape=(imgs.shape[0], h * w, p ** 2 * 3))
+        x = x.reshape(shape=(imgs.shape[0], h * w, p ** 2 * self.in_chans))
         return x
 
     def unpatchify(self, x):
@@ -69,9 +70,9 @@ class DAMA(nn.Module):
         h = w = int(x.shape[1] ** .5)
         assert h * w == x.shape[1]
 
-        x = x.reshape(shape=(x.shape[0], h, w, p, p, 3))
+        x = x.reshape(shape=(x.shape[0], h, w, p, p, self.in_chans))
         x = torch.einsum('nhwpqc->nchpwq', x)
-        imgs = x.reshape(shape=(x.shape[0], 3, h * p, h * p))
+        imgs = x.reshape(shape=(x.shape[0], self.in_chans, h * p, h * p))
         return imgs
 
     def forward_recon_loss(self, imgs, pred, mask):
