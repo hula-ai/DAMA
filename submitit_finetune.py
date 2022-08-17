@@ -3,6 +3,18 @@
 # --------------------------------------------------------
 # Reference https://github.com/facebookresearch/mae
 
+"""
+python submitit_finetune.py --arch main_vit_base \
+      --img_size 128 --patch_size 16 --in_chans 7 \
+      --batch_size 128 --epochs 150 --num_classes 5 --warmup_epochs 5 --accum_iter 1 \
+      --blr 5e-4 --min_lr 1e-6 --layer_decay 0.65  \
+      --weight_decay 0.05 --drop_path 0.1 --reprob 0.25 --mixup 0.8 --cutmix 1.0 \
+      --data_path data_path \
+      --finetune checkpoint_paths_*.pth \
+      --job_dir output_dir \
+      --code_dir your_code_base_dir \
+      --dist_eval --nodes 1 --ngpus 4
+"""
 
 import argparse
 import os
@@ -16,11 +28,12 @@ import submitit
 
 def parse_args():
     classification_parser = classification.get_args_parser()
-    parser = argparse.ArgumentParser("Submitit for MAEIN finetune", parents=[classification_parser])
+    parser = argparse.ArgumentParser("Submitit for DAMA finetune", parents=[classification_parser])
     parser.add_argument("--ngpus", default=8, type=int, help="Number of gpus to request on each node")
     parser.add_argument("--nodes", default=1, type=int, help="Number of nodes to request")
     parser.add_argument("--timeout", default=4320, type=int, help="Duration of the job")
     parser.add_argument("--job_dir", default="", type=str, help="Job dir. Leave empty for automatic.")
+    parser.add_argument("--code_dir", default="", type=str, help="Copy code folder to job_dir")
 
     parser.add_argument("--partition", default="batch", type=str, help="Partition where to submit")
     parser.add_argument("--use_volta32", action='store_true', help="Request 32G V100 GPUs")
@@ -122,7 +135,7 @@ def main():
         **kwargs
     )
 
-    executor.update_parameters(name="maeinfo")
+    executor.update_parameters(name="DAMA")
 
     args.dist_url = get_init_file(args.job_dir).as_uri()
     args.output_dir = args.job_dir
@@ -137,7 +150,7 @@ def main():
     print(job.job_id)
 
     # src_copy = 'DAMA folder/' # create a copy of DAMA code to output folder
-    src_copy = '/project/hnguyen2/stly/code/DAMA/DAMA'
+    src_copy = args.code_dir
     dst=args.output_dir+'/DAMA'
     copy_folder(src_copy, dst)
 
