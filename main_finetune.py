@@ -36,6 +36,10 @@ from utils import NativeScalerWithGradNormCount as NativeScaler
 import DAMA.vision_transformer_finetune as vits
 import DAMA.pos_embed as pos_embed
 
+from data_transform import *
+from cell_data import CellCustomImageDataset_CLS
+import tifffile
+
 torchvision_archs = sorted(name for name in torchvision_models.__dict__
     if name.islower() and not name.startswith("__")
     and callable(torchvision_models.__dict__[name]))
@@ -52,8 +56,10 @@ def get_args_parser():
 
     parser.add_argument('--img_size', default=128, type=int,
                         help='images input size')
-    parser.add_argument('--patch_size', default=8, type=int,
+    parser.add_argument('--patch_size', default=16, type=int,
                         help='vits patch size')
+    parser.add_argument('--in_chans', default=7, type=int,
+                        help='images channels')
 
     parser.add_argument('--is_momentum', action='store_true')
 
@@ -63,12 +69,6 @@ def get_args_parser():
     parser.add_argument('--accum_iter', default=1, type=int,
                         help='Accumulate gradient iterations (for increasing the effective batch size under memory constraints)')
 
-    # Model parameters
-    parser.add_argument('--model', default='vit_large_patch16', type=str, metavar='MODEL',
-                        help='Name of model to train')
-
-    parser.add_argument('--input_size', default=224, type=int,
-                        help='images input size')
 
     parser.add_argument('--drop_path', type=float, default=0.1, metavar='PCT',
                         help='Drop path rate (default: 0.1)')
@@ -183,20 +183,41 @@ def main(args):
 
     # ============ preparing data ... ============
     # simple augmentation
-    transform_train = transforms.Compose([
-            transforms.RandomResizedCrop(args.img_size),
-            transforms.RandomHorizontalFlip(),
-            transforms.ToTensor()])
+    if args.in_chans != 7 :
+        transform_train = transforms.Compose([
+                transforms.RandomResizedCrop(args.img_size),
+                transforms.RandomHorizontalFlip(),
+                transforms.ToTensor()])
+        dataset_train = datasets.ImageFolder(os.path.join(args.data_path, 'train'), transform=transform_train)
 
-    dataset_train = datasets.ImageFolder(os.path.join(args.data_path, 'train'), transform=transform_train)
+        transform_val = transforms.Compose([
+                transforms.CenterCrop(50),
+                transforms.Resize(args.img_size),
+                transforms.ToTensor()])
+        dataset_val = datasets.ImageFolder(os.path.join(args.data_path, 'val'), transform=transform_val)
+    elif args.in_chans == 7:
+        def my_tiff_loader(filename):
+            return tifffile.imread(filename)
+
+        transform_train = Compose([
+                    RandomResizedCrop(args.img_size//2, args.img_size),  # 3 is bicubic
+                    RandomRotation(90),
+                    RandomShift(0.3),
+                    RandomHorizontalFlip(),
+                    RandomVerticalFlip(),
+                    ToTensor()])
+        dataset_train = datasets.ImageFolder(os.path.join(args.data_path, 'train'), loader=my_tiff_loader,
+                                             transform=transform_train)
+
+        transform_val = Compose([
+                        CenterCrop(48),
+                        Resize(args.img_size),
+                        ToTensor()])
+        dataset_val = datasets.ImageFolder(os.path.join(args.data_path, 'val'), loader=my_tiff_loader,
+                                             transform=transform_val)
+
     print(dataset_train)
     print(f"Train data loaded: there are {len(dataset_train)} images.")
-
-    transform_val = transforms.Compose([
-            transforms.CenterCrop(50),
-            transforms.Resize(args.img_size),
-            transforms.ToTensor()])
-    dataset_val = datasets.ImageFolder(os.path.join(args.data_path, 'val'), transform=transform_val)
     print(dataset_val)
     print(f"Val data loaded: there are {len(dataset_val)} images.")
 
@@ -254,6 +275,7 @@ def main(args):
     model = vits.__dict__[args.arch](
         img_size=args.img_size,
         patch_size=args.patch_size,
+        in_chans = args.in_chans,
         num_classes=args.num_classes,
         drop_path_rate=args.drop_path,
         global_pool=args.global_pool
