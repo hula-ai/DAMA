@@ -31,6 +31,8 @@ import DAMA.builder_sampling as builder
 import utils
 from utils import NativeScalerWithGradNormCount as NativeScaler
 
+from data_transform import *
+import tifffile
 
 torchvision_archs = sorted(name for name in torchvision_models.__dict__
     if name.islower() and not name.startswith("__")
@@ -48,12 +50,10 @@ def get_args_parser():
     # Model params
     parser.add_argument('--arch', default='main_vit_base', type=str, metavar='ARCH',
                         choices=model_names, help='Name of model to train')
-    parser.add_argument('--patch_size', default=8, type=int,
+    parser.add_argument('--patch_size', default=16, type=int,
                         help='images input size')
-
-    parser.add_argument('--num_samples', default=30000, type=int,
-                        help='images input size')
-
+    parser.add_argument('--in_chans', default=7, type=int,
+                        help='input channels')
     parser.add_argument('--img_size', default=224, type=int,
                         help='images input size')
     parser.add_argument('--mask_ratio', default=0.6, type=float,
@@ -144,12 +144,27 @@ def main(args):
 
     # ============ preparing data ... ============
     # simple augmentation
-    transform_train = transforms.Compose([
-            transforms.CenterCrop(50),
-            transforms.RandomResizedCrop(args.img_size, scale=(0.5, 1.0), interpolation=3),  # 3 is bicubic
-            transforms.RandomHorizontalFlip(),
-            transforms.ToTensor()])
-    dataset_train = datasets.ImageFolder(os.path.join(args.data_path, 'train'), transform=transform_train)
+    if args.in_chans != 7:
+        transform_train = transforms.Compose([
+                transforms.CenterCrop(50),
+                transforms.RandomResizedCrop(args.img_size, scale=(0.5, 1.0), interpolation=3),  # 3 is bicubic
+                transforms.RandomHorizontalFlip(),
+                transforms.ToTensor()])
+        dataset_train = datasets.ImageFolder(os.path.join(args.data_path, 'train'), transform=transform_train)
+    elif args.in_chans == 7:
+        def my_tiff_loader(filename):
+            return tifffile.imread(filename)
+
+        transform_train = Compose([
+            RandomResizedCrop(args.img_size // 2, args.img_size),  # 3 is bicubic
+            RandomRotation(90),
+            RandomShift(0.3),
+            RandomHorizontalFlip(),
+            RandomVerticalFlip(),
+            ToTensor()])
+        dataset_train = datasets.ImageFolder(os.path.join(args.data_path, 'train'), loader=my_tiff_loader,
+                                             transform=transform_train)
+
     print(dataset_train)
     print(f"Data loaded: there are {len(dataset_train)} images.")
 
@@ -179,8 +194,9 @@ def main(args):
 
     model = builder.DAMA(
             partial(vits.__dict__[args.arch], patch_size=args.patch_size, mask_ratio=args.mask_ratio,
-                    mask_overlap_ratio=args.mask_overlap_ratio, img_size=args.img_size),
-            loss_beta=args.loss_beta, last_k_blocks=args.last_k_blocks, loss_alpha=args.loss_alpha, norm_pix_loss=args.norm_pix_loss)
+                    mask_overlap_ratio=args.mask_overlap_ratio, img_size=args.img_size, in_chans=args.in_chans),
+            loss_beta=args.loss_beta, last_k_blocks=args.last_k_blocks, loss_alpha=args.loss_alpha,
+                    norm_pix_loss=args.norm_pix_loss, in_chans=args.in_chans)
 
     model.to(device)
     model_without_ddp = model
