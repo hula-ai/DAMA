@@ -1,5 +1,5 @@
 ## DAMA - Multiplexed Immunofluorescence Brain Image Analysis Using Self-Supervised Dual-Loss Adaptive Masked Autoencoder
-This is a PyTorch/GPU implementation of the paper [Student Collaboration Improves Self-Supervised Learning: Dual-Loss Adaptive Masked Autoencoder for Multiplexed Immunofluorescence Brain Images Analysis](https://arxiv.org/abs/2205.05194)
+This is a PyTorch/GPU implementation of the paper [Multiplexed Immunofluorescence Brain Image Analysis Using Self-Supervised Dual-Loss Adaptive Masked Autoencoder](https://arxiv.org/abs/2205.05194)
 
 * This repo is based on PyTorch=1.10.1 and timm=0.5.4
 
