@@ -4,20 +4,20 @@ This is a PyTorch/GPU implementation of the paper [Multiplexed Immunofluorescenc
 * This repo is based on PyTorch=1.10.1 and timm=0.5.4
 
 <p align="center">
-<img src="img_results/DAMA_pipeline.JPG">
-Fig. 1. (a) Overview of DAMA pipeline and (b) Information perspective.
+<img src="img_results/DAMA_pipeline2.jpg" width=85% height=85%>
+<p align="center"> Fig. 1. (a) Overview of DAMA pipeline and (b) Information perspective.
 </p>
 
 ### DAMA utilizes contextual information and performs better than other methods.
 
 <p align="center">
-<img src="img_results/seg_curves.JPG">
-Fig. 2. Segmentation mask error analysis: overall-all-all Precision-Recall curves.
+<img src="img_results/seg_curves2.jpg" width=85% height=85%>
+<p align="center"> Fig. 2. Segmentation mask error analysis: overall-all-all Precision-Recall curves.
 </p>
 
 <p align="center">
-<img src="img_results/viz_seg_sample.JPG">
-Fig. 3. Visualization of segmentation results on validation set.
+<img src="img_results/viz_seg_sample2.jpg" width=85% height=85%>
+<p align="center"> Fig. 3. Visualization of segmentation results on validation set.
 </p>
 
 Below is the fine-tune result of DAMA compared to other state-of-the-art methods pretrained on **brain cells dataset** and **ImageNet-1k**. 
@@ -27,32 +27,32 @@ Please see the paper for more results and figures.
 
 **Cell Classification**
 
-<p align="left">
+<p align="center">
 <img src="img_results/cls.jpg" width=85% height=85%>
-<p align="left"> Fig. 4. Comparisons of finetuning classification results of DAMA and state-of-the-art SSL methods.
+<p align="center"> Fig. 4. Comparisons of finetuning classification results of DAMA and state-of-the-art SSL methods.
 </p>
 
 **Cell Segmentation**
 
-<p align="left">
+<p align="center">
 <img src="img_results/seg.jpg" width=75% height=75%>
-<p align="left"> Fig. 5. Comparisons of finetuning segmentation results of DAMA and state-of-the-art SSL methods.
+<p align="center"> Fig. 5. Comparisons of finetuning segmentation results of DAMA and state-of-the-art SSL methods.
 </p>
 
 **Data Efficiency**
 
-<p align="left">
+<p align="center">
 <img src="img_results/data_eff.jpg" width=45% height=45% hspace="50">
 <img src="img_results/data_eff_plot.jpg" width=35% height=35%>
-<p align="left"> Fig. 6. Data efficiency comparison in terms of the mean and standard deviation. (Left) Using 10% of training data on classification and detection/segmentation tasks. (Right) Using 10%-100% of training data (right) on classification task.
+<p align="center"> Fig. 6. Data efficiency comparison in terms of the mean and standard deviation. (Left) Using 10% of training data on classification and detection/segmentation tasks. (Right) Using 10%-100% of training data (right) on classification task.
 </p>
 
 ### 2. Pretrained on ImageNet-1k
 Due to computational resource, DAMA is trained **only once** without any ablation experiment for ImageNet and with similar configuration as for trained the brain cell dataset.
 
-<p align="left">
+<p align="center">
 <img src="img_results/imagenet.jpg" width=30% height=30%>
-<p align="left"> Fig. 7. Comparisons results of DAMA and state-of-the-arts on ImageNet-1k.
+<p align="center"> Fig. 7. Comparisons results of DAMA and state-of-the-arts on ImageNet-1k.
 </p>
 
 ### Pre-training DAMA
