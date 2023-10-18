@@ -1,58 +1,70 @@
-## DAMA - Multiplexed Immunofluorescence Brain Image Analysis Using Self-Supervised Dual-Loss Adaptive Masked Autoencoder
-This is a PyTorch/GPU implementation of the paper [Multiplexed Immunofluorescence Brain Image Analysis Using Self-Supervised Dual-Loss Adaptive Masked Autoencoder](https://arxiv.org/abs/2205.05194)
+## DAMA - Cellular Data Extraction from Multiplexed Brain Imaging Data using Self-supervised Dual-loss Adaptive Masked Autoencoder
+This is a PyTorch/GPU implementation of the paper [Cellular Data Extraction from Multiplexed Brain Imaging Data using Self-supervised Dual-loss Adaptive Masked Autoencoder](https://arxiv.org/abs/2205.05194)
 
 * This repo is based on PyTorch=1.10.1 and timm=0.5.4
 
-<p align="center">
-<img src="img_results/DAMA_pipeline2.jpg" width=85% height=85%>
-<p align="center"> Fig. 1. (a) Overview of DAMA pipeline and (b) Information perspective.
-</p>
-
-### DAMA utilizes contextual information and performs better than other methods.
+## DAMA Overview
 
 <p align="center">
-<img src="img_results/seg_curves2.jpg" width=85% height=85%>
-<p align="center"> Fig. 2. Segmentation mask error analysis: overall-all-all Precision-Recall curves.
+<img src="assets/imgs/DAMA_pipeline.jpg" width=85% height=85%>
+<p align="center"> Overview of DAMA pipeline.
+</p>
+
+## Results
+Please see the paper for more results.
+
+### Brain Cell datasets
+
+<p align="center">
+<img src="assets/imgs/seg_curves.jpg" width=85% height=85%>
+<p align="center"> Segmentation mask error analysis: overall-all-all Precision-Recall curves.
 </p>
 
 <p align="center">
-<img src="img_results/viz_seg_sample2.jpg" width=85% height=85%>
-<p align="center"> Fig. 3. Visualization of segmentation results on validation set.
+<img src="assets/imgs/viz_seg_sample.jpg" width=85% height=85%>
+<p align="center"> Visualization of segmentation results on validation set.
 </p>
-
-Below is the fine-tune result of DAMA compared to other state-of-the-art methods pretrained on **brain cells dataset** and **ImageNet-1k**. 
-
-### 1. Brain Cell datasets
-Please see the paper for more results and figures.
 
 **Cell Classification**
 
 <p align="center">
-<img src="img_results/cls.jpg" width=85% height=85%>
-<p align="center"> Fig. 4. Comparisons of finetuning classification results of DAMA and state-of-the-art SSL methods.
+<img src="assets/imgs/cls.jpg" width=85% height=85%>
+<p align="center"> Comparisons of finetuning classification results of DAMA and state-of-the-art SSL methods.
 </p>
 
 **Cell Segmentation**
 
 <p align="center">
-<img src="img_results/seg.jpg" width=75% height=75%>
-<p align="center"> Fig. 5. Comparisons of finetuning segmentation results of DAMA and state-of-the-art SSL methods.
+<img src="assets/imgs/seg.jpg" width=75% height=75%>
+<p align="center"> Comparisons of finetuning segmentation results of DAMA and state-of-the-art SSL methods.
 </p>
 
 **Data Efficiency**
 
 <p align="center">
-<img src="img_results/data_eff.jpg" width=45% height=45% hspace="50">
-<img src="img_results/data_eff_plot.jpg" width=35% height=35%>
-<p align="center"> Fig. 6. Data efficiency comparison in terms of the mean and standard deviation. (Left) Using 10% of training data on classification and detection/segmentation tasks. (Right) Using 10%-100% of training data (right) on classification task.
+<img src="assets/imgs/data_eff.jpg" width=45% height=45% hspace="50">
+<img src="assets/imgs/data_eff_plot.jpg" width=35% height=35%>
+<p align="center"> Data efficiency comparison in terms of the mean and standard deviation. (Left) Using 10% of training data on classification and detection/segmentation tasks. (Right) Using 10%-100% of training data (right) on classification task.
 </p>
 
-### 2. Pretrained on ImageNet-1k
+### TissueNet
+
+To examine the generalizability of DAMA on TissueNet dataset
+
+<p align="center">
+<img src="assets/imgs/tisuenet_table.jpg" width=45% height=45%>
+<p align="center"> Comparisons results of DAMA and state-of-the-arts on TissueNet Greenwald et al. (2022) dataset.
+<p align="center">
+<img src="assets/imgs/tissuenet_viz.jpg" width=80% height=80%>
+<p align="center"> Visualization examples of DAMA’s prediction on the test set of TissueNet dataset.
+</p>
+
+### ImageNet-1k
 Due to computational resource, DAMA is trained **only once** without any ablation experiment for ImageNet and with similar configuration as for trained the brain cell dataset.
 
 <p align="center">
-<img src="img_results/imagenet.jpg" width=30% height=30%>
-<p align="center"> Fig. 7. Comparisons results of DAMA and state-of-the-arts on ImageNet-1k.
+<img src="assets/imgs/imagenet.jpg" width=30% height=30%>
+<p align="center"> Comparisons results of DAMA and state-of-the-arts on ImageNet-1k.
 </p>
 
 ### Pre-training DAMA
