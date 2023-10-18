@@ -1,4 +1,4 @@
-name: pytorch10
+name: dama
 channels:
   - pytorch
   - anaconda
@@ -167,4 +167,4 @@ dependencies:
     - tqdm==4.64.0
     - yacs==0.1.8
     - yapf==0.32.0
-prefix: /home/stly/anaconda3/envs/pytorch10
+prefix: /home/stly/anaconda3/envs/dama
