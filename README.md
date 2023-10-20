@@ -1,8 +1,6 @@
 ## DAMA - Cellular Data Extraction from Multiplexed Brain Imaging Data using Self-supervised Dual-loss Adaptive Masked Autoencoder
 This is a PyTorch/GPU implementation of the paper [Cellular Data Extraction from Multiplexed Brain Imaging Data using Self-supervised Dual-loss Adaptive Masked Autoencoder](https://arxiv.org/abs/2205.05194)
 
-* This repo is based on PyTorch=1.10.1 and timm=0.5.4
-
 ## 1. DAMA Overview
 
 <p align="center">
@@ -80,6 +78,12 @@ You can download the Brain cell data used in this study [here](https://app.box.c
 4. Go to downloaded `assets` folder inside the downloaded folder at step 1 and run `conda env create -f dama_env.yml`
 5. To activate this new environment, run `conda activate dama`
 
+### DATA Preparation
+
+Preparing the data to reproduce the results in this study.
+
+Coming soon...
+
 ### Pre-training DAMA
 
 For pre-training DAMA in Slurm cluster and local machine (with GPUs), we utilize [submitit](https://github.com/facebookincubator/submitit) which allows to switch seamlessly between executing on Slurm or locally. For pre-training, run the following:
@@ -92,6 +96,14 @@ python submitit_pretrain.py --arch main_vit_base \
       --code_dir code_base_dir \
       --nodes 1 --ngpus 4
 ```
+
+Before DAMA pretrained checkpoint can be used for fine-tuning, it must be convert by using this command:
+
+```
+python convert_dama_to_deit.py --input path_to_ckpt --output path_to_converted_ckpt
+```
+See [convert_dama_to_deit.py](https://github.com/hula-ai/DAMA/blob/main/convert_dama_to_deit.py) for details.
+
 
 ### Fine-tuning DAMA for cell classification
 ```
@@ -117,7 +129,13 @@ There are 2 ways to convert the ground truth to COCO format:
 
 **2. Fine-tuning**
 
-Please find the [config file](maskrcnn_vit_base.py) for segmentation fine-tuning used in this study in the `assest` folder.
+Please find the [config file](maskrcnn_vit_base.py) for segmentation fine-tuning used in this study in the `assest` folder. Fine-tuning commands for segmentation task are well-documented in [MMdet repo ViTDet](https://github.com/open-mmlab/mmdetection/tree/main/projects/ViTDet)
+
+### Baselines code
+
+Coming soon...
+
+Meanwhile, you can download [MoCo-v3](https://github.com/facebookresearch/moco-v3) and [MAE](https://github.com/facebookresearch/mae) and modify the dataloader similar to one in DAMA's `main_pretrain.py` and `main_finetune.py`.
 
 ```
 @article{ly2022student,
