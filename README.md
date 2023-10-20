@@ -56,7 +56,7 @@ To examine the generalizability of DAMA on TissueNet dataset ([Whole-cell segmen
 <p align="center"> Comparisons results of DAMA and state-of-the-arts on TissueNet dataset.
 <p align="center">
 <img src="assets/imgs/tissuenet_viz.jpg" width=80% height=80%>
-<p align="center"> Visualization examples of DAMA’s prediction on the test set of TissueNet dataset.
+<p align="center"> Visualization examples of DAMA’s prediction on the test set of TissueNet dataset with the six cell types captured by different platforms.
 </p>
 
 ### 2.3 ImageNet-1k
@@ -77,10 +77,12 @@ You can download the Brain cell data used in this study [here](https://app.box.c
 1. Clone this repository by `git clone https://github.com/hula-ai/DAMA.git`
 2. Install an [Anaconda](https://www.anaconda.com/products/distribution) distribution of Python. Note you might need to use an anaconda prompt if you did not add anaconda to the path.
 3. Open an anaconda prompt / command prompt which has `conda` for **python 3** in the path
-4. Go to downloaded DAMA folder at step 1 and run `conda env create -f assets/environment.yml`
+4. Go to downloaded `assets` folder inside the downloaded folder at step 1 and run `conda env create -f dama_env.yml`
 5. To activate this new environment, run `conda activate dama`
 
 ### Pre-training DAMA
+
+For pre-training DAMA in Slurm cluster and local machine (with GPUs), we utilize [submitit](https://github.com/facebookincubator/submitit) which allows to switch seamlessly between executing on Slurm or locally. For pre-training, run the following:
 ```
 python submitit_pretrain.py --arch main_vit_base \
       --batch_size 64 --epochs 500 --warmup_epochs 40 \
@@ -103,9 +105,19 @@ python submitit_finetune.py --arch main_vit_base \
 ```
 
 ### Fine-tuning DAMA for cell segmentation
-Please adapt [ViTDet: Exploring Plain Vision Transformer Backbones for Object Detection](https://arxiv.org/abs/2203.16527) from [Detectron2 repo ViTDet](https://github.com/facebookresearch/detectron2/tree/224cd2318fdb45b5e22bbb861ee9711ee52c8b75/projects/ViTDet)
 
+Please adapt [ViTDet: Exploring Plain Vision Transformer Backbones for Object Detection](https://arxiv.org/abs/2203.16527) from [MMdet repo ViTDet](https://github.com/open-mmlab/mmdetection/tree/main/projects/ViTDet)
 
+**1. Converting ground truth to COCO format**
+There are 2 ways to convert the ground truth to COCO format:
+
+(i) Follow the tutorial [here](https://patrickwasp.com/create-your-own-coco-style-dataset/) to create/convert ground truth to COCO format.
+
+(ii) Follow the `dataset_converters` tool in MMdet library [images2coco.py](https://github.com/open-mmlab/mmdetection/blob/main/tools/dataset_converters/images2coco.py).
+
+**2. Fine-tuning**
+
+Please find the [config file](maskrcnn_vit_base.py) for segmentation fine-tuning used in this study in the `assest` folder.
 
 ```
 @article{ly2022student,
